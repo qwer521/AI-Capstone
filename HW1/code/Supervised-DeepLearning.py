@@ -80,9 +80,6 @@ def main():
     model.compile(loss='sparse_categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
     model.summary()
 
-    # Early stopping callback to prevent overfitting (optional)
-    # early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-
     # Train the model with a validation split
     epochs = 25
     batch_size = 8
@@ -91,7 +88,6 @@ def main():
         validation_split=0.2,
         epochs=epochs,
         batch_size=batch_size,
-        # callbacks=[early_stopping],
         verbose=1
     )
 
