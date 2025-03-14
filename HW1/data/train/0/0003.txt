@@ -1,0 +1,17 @@
+class Solution {
+public:
+    string clearDigits(string s) {
+        bool removed = true;
+        while (removed) {
+            removed = false;
+            for (int i = 1; i < s.size(); i++) {
+                if (isdigit(s[i]) && !isdigit(s[i - 1])) {
+                    s.erase(i - 1, 2);
+                    removed = true;
+                    break;
+                }
+            }
+        }
+        return s;
+    }
+};

@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int func(string &s, int i, int j, int k, vector<vector<vector<int>>> &dp) {
+        if (i > j) return 0;
+        if (i == j) return 1;
+        if (dp[i][j][k] != -1) return dp[i][j][k];
+
+        int ans = 0;
+        if (s[i] == s[j]) {
+            ans = 2 + func(s, i + 1, j - 1, k, dp);
+        } else {
+            ans = max(func(s, i + 1, j, k, dp), func(s, i, j - 1, k, dp));
+
+            int dis = min(abs(s[i] - s[j]), 26 - abs(s[i] - s[j])); 
+            if (dis <= k) {
+                ans = max(ans, 2 + func(s, i + 1, j - 1, k - dis, dp));
+            }
+        }
+
+        dp[i][j][k] = ans;
+        return ans;
+    }
+
+    int longestPalindromicSubsequence(string s, int k) {
+        int n = s.length();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(n, vector<int>(k + 1, -1)));
+        return func(s, 0, n - 1, k, dp);
+    }
+};

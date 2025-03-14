@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+#include <string>
+class Solution {
+public:
+    queue<pair<int,int>> g;
+    TreeNode* recoverFromPreorder(string traversal) {
+        int pos=traversal.find("-");
+        if(pos==string::npos){
+            g.push({stoi(traversal),0});
+            traversal="";
+        }
+        else{
+            g.push({stoi(traversal.substr(0,pos)),0});
+            traversal=traversal.substr(pos);
+        }
+        while(traversal.size()){
+            pair<int,int> p;
+            int pos=0;
+            while(pos<traversal.size() && traversal[pos]=='-')pos++;
+            p.second=pos;
+            traversal=traversal.substr(pos);
+            pos=traversal.find("-");
+            if(pos==string::npos){
+                p.first=stoi(traversal);
+                traversal="";
+            }
+            else{
+                p.first=stoi(traversal.substr(0,pos));
+                traversal=traversal.substr(pos);
+            }
+            g.push(p);
+        }
+        // for(auto i:g){
+        //     cout<<i.first<<" "<<i.second<<"\n";
+        // }
+        TreeNode* root=dfs(0);
+        return root;
+    }
+    TreeNode* dfs(int d){
+        if(!g.size() || g.front().second!=d)return nullptr;
+        TreeNode* t= new TreeNode(g.front().first);
+        g.pop();
+        t->left=dfs(d+1);
+        t->right=dfs(d+1);
+        return t;
+    }
+};

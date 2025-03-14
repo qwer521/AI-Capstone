@@ -1,0 +1,57 @@
+class Solution {
+public:
+    void func(string &s, int k, vector<long long>&start_from){
+        int n = s.length();
+        long long zero = 0, one = 0;
+        long long i = 0, j = 0;
+        for(int i=0;i<n;i++){
+            while((one<=k || zero<=k) && j<n){
+                if(s[j]=='0') zero++;
+                else one++;
+                if(one>k && zero>k){
+                    if(s[j] == '1') one--;
+                    else zero--;
+                    break;
+                }
+                j++;
+            }
+            long long count = j-i;
+            start_from[i] = count;
+            if(s[i]=='0') zero--;
+            else one--;
+        }
+        
+    }
+
+    vector<long long> countKConstraintSubstrings(string s, int k, vector<vector<int>>& qr) {
+        int n = s.length();
+        vector<long long>start_from(n);
+        vector<long long>end_at(n);
+        vector<long long>ans;
+        func(s, k, start_from);
+        reverse(s.begin(), s.end());
+        func(s, k, end_at);
+        vector<long long>temp = start_from;
+        reverse(end_at.begin(), end_at.end());
+       
+        for(int i=1;i<n;i++) start_from[i] += start_from[i-1];
+        for(int i=n-2;i>=0;i--) end_at[i] += end_at[i+1];
+        int total = start_from[n-1];
+        int q = qr.size();
+
+        for(auto i:qr){
+            int l = i[0];
+            int r = i[1];
+            if(temp[l]+l>r){
+                long long count = r-l+1;
+                ans.push_back((long long) count*(count+1)/2);
+                continue;
+            }
+            long long before_left = 0, after_right = 0;
+            if(l-1>=0) before_left += start_from[l-1];
+            if(r+1<n) after_right += end_at[r+1];
+            ans.push_back(total-before_left-after_right);
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int dp[1005][1005]{0};
+    unordered_map<int,int> m;
+    int k=0;
+    int f(vector<int>& nums,int i,int a){
+        if(!m[a])m[a]=++k;
+        if(dp[m[a]][i])return dp[m[a]][i];
+        if(nums.size()-1==i){
+            dp[m[a]][i]=max(a,nums[i]);
+            return dp[m[a]][i];
+        }
+        else if(nums.size()==i){
+            dp[m[a]][i]=a;
+            return dp[m[a]][i];
+        }
+        dp[m[a]][i]=min({
+                f(nums,i+2,a)+max(nums[i],nums[i+1]),
+                f(nums,i+2,nums[i])+max(a,nums[i+1]),
+                f(nums,i+2,nums[i+1])+max(nums[i],a),
+            });
+        return dp[m[a]][i];
+    }
+    int minCost(vector<int>& nums) {
+        m[nums[0]]=++k;
+        return f(nums,1,nums[0]);
+    }
+};

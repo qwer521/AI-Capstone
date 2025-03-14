@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        int n = nums.size();
+        int ans = INT_MAX;
+        vector<int>dup(n,0);
+
+        sort(nums.begin() , nums.end());
+
+        for(int i=1;i<n;i++){
+            if(nums[i]==nums[i-1]){
+                dup[i] = dup[i-1]+1;
+            }
+            else{
+                dup[i]=dup[i-1];
+            }
+        }
+        for(int i=0;i<n;i++){
+            cout<<nums[i]<<" ";
+            int left = nums[i];
+            int right = left+n-1;
+            int index = upper_bound(nums.begin()+i,nums.end() , right)-nums.begin();
+            int duplicates = -dup[i];
+            if(index<n)
+            duplicates+= dup[index];
+            else
+            duplicates+= dup[n-1];
+
+            ans = min(ans , (n-index)+(i)+duplicates);
+        }
+        return ans;
+    }
+};

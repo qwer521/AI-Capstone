@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int minimumTime(int n, vector<vector<int>>& relations, vector<int>& time) {
+        vector<vector<int>>adjList(n);
+        vector<int>indegree(n);
+        for(int i=0;i<relations.size();i++){
+            indegree[relations[i][1]-1]++;
+            adjList[relations[i][0]-1].push_back(relations[i][1]-1);
+        }
+        queue<int>q;
+        int ans = 0;
+        vector<int>endTime(n, 0);
+        for(int i=0;i<n;i++){
+            if(indegree[i]==0){
+                endTime[i]=time[i];
+                q.push(i);
+            }
+        }
+
+        while(!q.empty()){
+            int course = q.front();
+
+            for(auto i:adjList[course]){
+                indegree[i]--;
+                endTime[i] = max(endTime[i] , endTime[course]+time[i]);
+                if(indegree[i]==0){
+                   q.push(i);
+                }
+            }
+            q.pop();
+        }
+        for(auto i:endTime){
+            ans = max(ans , i);
+        }
+        return ans;
+    }
+};

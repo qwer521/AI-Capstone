@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int maxAbsoluteSum(vector<int>& nums) {
+        int maxSum = 0, curr = 0;
+        int minSum = 0, currMin = 0;
+        for (int x : nums) {
+            curr = max(x, curr + x);
+            maxSum = max(maxSum, curr);
+            currMin = min(x, currMin + x);
+            minSum = min(minSum, currMin);
+        }
+        return max(maxSum, -minSum);
+    }
+};

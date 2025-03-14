@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int flag=0;
+    vector<int> constructDistancedSequence(int n) {
+        vector<int> a(2*n-1,0);
+        set<int> s; 
+        f(a,s,0,n);
+        return a;
+    }
+    int f(vector<int>& a,set<int>& s,int p,int n){
+        if(p==2*n-1){
+            flag=1;
+            return 1;
+        }else if(a[p]){
+            return f(a,s,p+1,n);
+        }
+        for(int t=n;t>=1;t--){
+            if(s.count(t))continue;
+            int next = (t > 1) ? p + t : p;
+            if(next<2*n-1 && a[next]==0){
+                a[p]=t;
+                if(t!=1) a[next]=t;
+                s.insert(t);
+                int tmp=f(a,s,p+1,n);
+                if(tmp)return 1;
+                a[p]=0;
+                if(t!=1) a[next]=0;
+                s.erase(t);
+            }
+        }
+        return 0;
+    }
+};

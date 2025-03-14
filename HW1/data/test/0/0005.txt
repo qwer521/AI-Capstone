@@ -1,0 +1,42 @@
+class Solution {
+    unordered_map<long long, int> memo;
+    int n;
+    vector<int> arr;
+    
+    int f(int i, int p) {
+        long long key = ((long long)i << 32) | (unsigned int)p;
+        if(memo.count(key)) return memo[key];
+        int cnt = (p ? 1 : 0) + (n - i);
+        if(cnt < 3) {
+            int m = 0;
+            if(p) m = p;
+            for (int j = i; j < n; j++) {
+                m = max(m, arr[j]);
+            }
+            return memo[key] = m;
+        }
+        int best = INT_MAX;
+        if(p) {
+            int A0 = p, A1 = arr[i], A2 = arr[i+1];
+            // Option 1: remove (A0, A1), leftover A2, new index i+1.
+            best = min(best, max(A0, A1) + f(i+1, A2));
+            // Option 2: remove (A0, A2), leftover A1.
+            best = min(best, max(A0, A2) + f(i+1, A1));
+            // Option 3: remove (A1, A2), leftover A0.
+            best = min(best, max(A1, A2) + f(i+1, A0));
+        } else {
+            int A0 = arr[i], A1 = arr[i+1], A2 = arr[i+2];
+            best = min(best, max(A0, A1) + f(i+3, A2));
+            best = min(best, max(A0, A2) + f(i+3, A1));
+            best = min(best, max(A1, A2) + f(i+3, A0));
+        }
+        return memo[key] = best;
+    }
+public:
+    int minCost(vector<int>& nums) {
+        n = nums.size();
+        arr = nums;
+        memo.clear();
+        return f(0, 0);
+    }
+};

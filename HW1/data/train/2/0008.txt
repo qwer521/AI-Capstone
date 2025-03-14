@@ -1,0 +1,48 @@
+class Graph {
+public:
+    vector<vector<pair<int,int>>>adjList;
+
+    Graph(int n, vector<vector<int>>& edges){
+        
+        adjList.resize(n);
+        for(auto i:edges){
+            adjList[i[0]].push_back({i[1] , i[2]});
+        }
+    }
+    
+    void addEdge(vector<int> edge) {
+        adjList[edge[0]].push_back({edge[1] , edge[2]});
+    }
+    
+    int shortestPath(int node1, int node2) {
+        set<pair<int,int>>st;
+        vector<int>distances(adjList.size() , 1e9);
+        vector<int>visited(adjList.size());
+        st.insert({0 ,node1});
+        distances[node1] = 0;
+
+        while(!st.empty()){
+              pair<int,int>p = *(st.begin());
+              int node = p.second;
+              int cost = p.first;
+              visited[node] = 1;
+              st.erase(p);
+              for(auto i:adjList[node]){
+                  if(!visited[i.first]){
+                      if(distances[i.first]>distances[node] + i.second){
+                        distances[i.first] = distances[node] + i.second;
+                        st.insert({distances[i.first],i.first });
+                    }
+                  }
+              }
+        }
+        return (distances[node2]<1e9)?distances[node2]:-1;  
+    }
+};
+
+/**
+ * Your Graph object will be instantiated and called as such:
+ * Graph* obj = new Graph(n, edges);
+ * obj->addEdge(edge);
+ * int param_2 = obj->shortestPath(node1,node2);
+ */

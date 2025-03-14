@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int numTilePossibilities(string tiles) {
+        unordered_map<char,int> m;
+        for(auto i:tiles){
+            m[i]++;
+        }
+        return dfs(m,0,tiles.size());
+    }
+    int dfs(unordered_map<char,int>& m,int d,int n){
+        if(d==n)return 0;
+        int sum=0;
+        for(auto i:m){
+            if(i.second>0){
+                m[i.first]--;
+                sum+=dfs(m,d+1,n);
+                m[i.first]++;
+                sum++;
+            }
+        }
+        return sum;
+    }
+};

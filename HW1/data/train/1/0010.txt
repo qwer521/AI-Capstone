@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int candy(vector<int>& ratings) {
+        int sum=0,t=1,cur=1,tmp=-1;
+        for(int i=0;i<ratings.size();i++){
+            if(i>0 && ratings[i-1]<ratings[i]){
+                if(t==1) {
+                    cur=2;
+                }
+                tmp=cur;
+                t=0;
+            }
+            else if(i>0 && ratings[i-1]>ratings[i]){
+                if(tmp==cur)cur++;
+                if(t==0) cur=1;
+                t=1;
+            }
+            else if(i>0 && ratings[i-1]==ratings[i]){
+                t=2;
+                cur=1;
+                tmp=0;
+            }
+            sum+=cur;
+            // cout<<tmp<<" "<<cur<<"\n";
+            cur++;
+        }
+        return sum;
+    }
+};

@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> ans;
+    vector<bool> used;
+    int n, len;
+    
+    bool backtrack(vector<int>& seq, int pos) {
+        if (pos == len) return true;
+        if (seq[pos] != 0) return backtrack(seq, pos + 1);
+        for (int num = n; num >= 1; num--) {
+            if (used[num]) continue;
+            if (num == 1) {
+                // Place 1 at pos
+                seq[pos] = 1;
+                used[1] = true;
+                if (backtrack(seq, pos + 1)) return true;
+                seq[pos] = 0;
+                used[1] = false;
+            } else {
+                int j = pos + num;
+                if (j < len && seq[j] == 0) {
+                    seq[pos] = num;
+                    seq[j] = num;
+                    used[num] = true;
+                    if (backtrack(seq, pos + 1)) return true;
+                    seq[pos] = 0;
+                    seq[j] = 0;
+                    used[num] = false;
+                }
+            }
+        }
+        return false;
+    }
+    
+    vector<int> constructDistancedSequence(int n) {
+        this->n = n;
+        len = 2 * n - 1;
+        vector<int> seq(len, 0);
+        used.assign(n + 1, false);
+        backtrack(seq, 0);
+        return seq;
+    }
+};

@@ -1,0 +1,30 @@
+class Solution {
+public:
+    double mincostToHireWorkers(vector<int>& q, vector<int>& vec, int k) {
+        int n = vec.size();
+        double ans = INT_MAX;
+        vector<pair<double,double>>x(n);
+        for(int i=0;i<n;i++){
+            x[i].first = q[i];
+            x[i].second = vec[i];
+        }
+
+        sort(x.begin(), x.end());
+        for(int i=0;i<n;i++){
+            double p = (double)x[i].second/x[i].first;
+            double temp = x[i].second, cnt=0;
+            int m = k;
+            for(int j=0;j<n;j++){
+                if(i==j) continue;
+                double f = p*x[j].first;
+                if(f>=x[j].second && cnt<k-1){
+                    temp += f;
+                    cnt++;
+                }
+            }
+            if(cnt<k-1) continue;
+            ans = min(ans, temp);
+        }
+        return ans;
+  }
+};

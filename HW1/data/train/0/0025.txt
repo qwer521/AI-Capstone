@@ -1,0 +1,22 @@
+class NumberContainers {
+    unordered_map<int, int> idxToNum;
+    unordered_map<int, set<int>> numToIndices;
+public:
+    NumberContainers() {
+    }
+    
+    void change(int index, int number) {
+        if (idxToNum.count(index)) {
+            int prev = idxToNum[index];
+            numToIndices[prev].erase(index);
+        }
+        idxToNum[index] = number;
+        numToIndices[number].insert(index);
+    }
+    
+    int find(int number) {
+        if (!numToIndices.count(number) || numToIndices[number].empty())
+            return -1;
+        return *numToIndices[number].begin();
+    }
+};

@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr) {
+        vector<int> odd(arr.size(),0),even(arr.size(),0);
+        int sum=0,m=1e9+7;
+        if(arr[0]%2){
+            odd[0]=1;
+            sum++;
+        }
+        else even[0]=1;
+        for(int i=1;i<arr.size();i++){
+            if(arr[i]%2){
+                odd[i]=even[i-1]+1;
+                even[i]=odd[i-1];
+            }
+            else{
+                odd[i]=odd[i-1];
+                even[i]=even[i-1]+1;
+            }
+            sum+=odd[i];
+            // cout<<odd[i]<<" "<<even[i]<<"\n";
+            sum%=m;
+        }
+        return sum;
+    }
+};

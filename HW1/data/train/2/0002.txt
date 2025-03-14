@@ -1,0 +1,49 @@
+class Solution {
+public:
+    int maximumScore(vector<int>& nums, int k) {
+        int n = nums.size();
+        
+        vector<int>vec(n , nums[k]);
+        for(int i=k-1;i>=0;i--){
+            if(i==k-1) vec[i] = nums[i];
+            else vec[i] = min(vec[i+1] , nums[i]);
+        }
+        for(int i=k+1;i<n;i++){
+            if(i==k+1) vec[i] = nums[i];
+            else vec[i] = min(vec[i-1] , nums[i]);
+        }
+        reverse(vec.begin()+k+1 , vec.end());
+        map<int,int>mp;
+        for(int i=k+1,j=n-1;i<n;i++,j--){
+            mp[i] = j;
+        }
+        int ans = nums[k];
+        for(int left=0;left<k;left++){
+            int right = lower_bound(vec.begin()+k+1 , vec.end() , vec[left])-vec.begin();
+        
+            if(right>k and right<n){
+                int mini = min({vec[left] ,vec[right] , nums[k]});
+                ans= max(ans , mini*(mp[right]-left+1));
+            }
+        }
+
+        for(int right=k+1;right<n;right++){
+            int left = lower_bound(vec.begin() , vec.begin()+k , vec[right])-vec.begin();
+            if(left>=0 and left<k){
+                int mini = min({vec[left] ,vec[right] , nums[k]});
+                ans= max(ans , mini*(mp[right]-left+1));
+            }
+        }
+        int mini = nums[k];
+        for(int i=k-1;i>=0;i--){
+            mini = min(nums[i] , mini);
+            ans = max(ans , mini*(k-i+1));
+        }
+        mini = nums[k];
+        for(int i=k+1;i<n;i++){
+            mini = min(mini , nums[i]);
+            ans = max(ans , mini*(i-k+1));
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int maximumSum(vector<int>& nums) {
+        unordered_map<int, pair<int, int>> best;
+        auto digitSum = [&](int num) {
+            int s = 0;
+            while (num) {
+                s += num % 10;
+                num /= 10;
+            }
+            return s;
+        };
+        
+        for (int num : nums) {
+            int s = digitSum(num);
+            if (!best.count(s)) {
+                best[s] = {num, -1};
+            } else {
+                auto &p = best[s];
+                if (num > p.first) {
+                    p.second = p.first;
+                    p.first = num;
+                } else if (num > p.second) {
+                    p.second = num;
+                }
+            }
+        }
+        
+        int ans = -1;
+        for (auto &it : best) {
+            auto &p = it.second;
+            if (p.second != -1) {
+                ans = max(ans, p.first + p.second);
+            }
+        }
+        return ans;
+    }
+};

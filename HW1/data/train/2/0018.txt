@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int maxFreeTime(int eventTime, int k, vector<int>& start, vector<int>& end) {
+        int n = start.size();
+        vector<pair<int,int>>vec(n);
+        for(int i=0;i<n;i++){
+            vec[i] = {start[i], end[i]};
+        }
+        int ans = 0;
+        vector<int>events(n);
+        for(int i=0;i<n;i++){
+            events[i] = end[i] - start[i];
+        }
+        int sum = 0;
+        for(int i=0;i<k-1;i++) sum += events[i];
+        int nextStart = eventTime, prevEnd = 0;
+        for(int i=0;i<=n-k;i++){
+            if(i-1>=0){
+                prevEnd = vec[i-1].second;
+                sum -= events[i-1];
+            }
+            if(i+k<n){
+                nextStart = vec[i+k].first;
+            }else{
+                nextStart = eventTime;
+            }
+            sum += events[i+k-1];
+            ans = max(ans, nextStart-prevEnd-sum);
+        }
+        return ans;
+    }
+};

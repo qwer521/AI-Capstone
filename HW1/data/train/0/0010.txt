@@ -1,0 +1,42 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+    int pos = 0;
+    
+    TreeNode* recover(const string& s, int depth) {
+        int n = s.size();
+        int d = 0;
+        int tempPos = pos;
+        while (tempPos < n && s[tempPos] == '-') {
+            d++;
+            tempPos++;
+        }
+        if (d != depth) return nullptr;
+        
+        pos = tempPos;
+        int num = 0;
+        while (pos < n && isdigit(s[pos])) {
+            num = num * 10 + (s[pos] - '0');
+            pos++;
+        }
+        TreeNode* node = new TreeNode(num);
+        node->left = recover(s, depth + 1);
+        node->right = recover(s, depth + 1);
+        return node;
+    }
+    
+public:
+    TreeNode* recoverFromPreorder(string traversal) {
+        pos = 0;
+        return recover(traversal, 0);
+    }
+};

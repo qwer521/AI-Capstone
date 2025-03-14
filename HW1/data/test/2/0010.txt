@@ -1,0 +1,37 @@
+class Solution {
+public: 
+    void checkEle(vector<int>&grp, int i, map<int,int>&mp, vector<int>&ans){
+        for(int k=1;k<=sqrt(grp[i]);k++){
+            if(grp[i]%k == 0){
+                if(mp.find(k)!=mp.end()){
+                    ans[i] = min(ans[i], mp[k]);
+                }
+                if(mp.find(grp[i]/k)!=mp.end()){
+                    ans[i] = min(ans[i], mp[grp[i]/k]);
+                }
+            }
+        }
+    }
+    
+    vector<int> assignElements(vector<int>& grp, vector<int>& ele) {
+        int n = ele.size();
+        map<int,int>mp;
+        vector<int>ans(grp.size(), 1e8);
+        for(int i=0;i<n;i++){
+            if(mp.find(ele[i])!=mp.end()){
+                // Add the minimum index corresponding to each element in a map to reduce time comp
+                mp[ele[i]] = min(i, mp[ele[i]]);
+            }
+            else{
+                mp[ele[i]] = i;
+            }
+        }
+        for(int i=0;i<grp.size();i++){
+            checkEle(grp, i, mp, ans); 
+        }
+        for(int i=0;i<grp.size();i++){
+            if(ans[i] == 1e8) ans[i] = -1;
+        }
+        return ans;
+    }
+};

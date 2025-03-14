@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int dp[1005][1005]{0},prev[1005][1005];
+    string shortestCommonSupersequence(string str1, string str2) {
+        int i,j;
+        for(i=1;i<=str1.size();i++){
+            for(j=1;j<=str2.size();j++){
+                if(str1[i-1]==str2[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                    prev[i][j]=0;
+                }
+                else if(dp[i-1][j]>dp[i][j-1]){
+                    dp[i][j]=dp[i-1][j];
+                    prev[i][j]=1;
+                }
+                else{
+                    dp[i][j]=dp[i][j-1];
+                    prev[i][j]=2;
+                }
+            }
+        }
+        int l=dp[str1.size()][str2.size()];
+        i=str1.size();
+        j=str2.size();
+        string lca="";
+        while(l){
+            if(prev[i][j]==0){
+                lca+=str1[i-1];
+                i--;
+                j--;
+                l--;
+            }
+            else if(prev[i][j]==1) i--;
+            else j--;
+        }
+        reverse(lca.begin(),lca.end());
+        string s="";
+        i=0;
+        j=0;
+        for(int k=0;k<lca.size();k++){
+            while(i<str1.size() && str1[i]!=lca[k]){
+                s+=str1[i];
+                i++;
+            }
+            while(j<str2.size() && str2[j]!=lca[k]){
+                s+=str2[j];
+                j++;
+            }
+            s+=lca[k];
+            i++;
+            j++;
+        }
+        while(i<str1.size()){
+            s+=str1[i];
+            i++;
+        }
+        while(j<str2.size()){
+            s+=str2[j];
+            j++;
+        }
+        return s;
+    }
+};

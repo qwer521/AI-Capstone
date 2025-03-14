@@ -1,0 +1,10 @@
+class Solution {
+public:
+    bool isReachableAtTime(int sx, int sy, int fx, int fy, int t) {
+        int dis = max(abs(sx-fx) , abs(sy-fy));
+        if(dis==0){
+            return t==0 or t!=1;
+        }
+        return dis<=t;
+    }
+};

@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<long long> findMaxSum(vector<int>& nums1, vector<int>& nums2, int k) {
+        int n = nums1.size();
+        vector<tuple<int, int, int>> arr;
+        for (int i = 0; i < n; i++) {
+            arr.emplace_back(nums1[i], nums2[i], i);
+        }
+        sort(arr.begin(), arr.end(), [](auto &a, auto &b) {
+            return get<0>(a) < get<0>(b);
+        });
+        vector<long long> ans(n, 0);
+        priority_queue<int, vector<int>, greater<int>> heap;
+        long long sum = 0;
+        for (int i = 0; i < n;) {
+            int curr = get<0>(arr[i]);
+            int j = i;
+            while(j < n && get<0>(arr[j]) == curr) {
+                ans[get<2>(arr[j])] = sum;
+                j++;
+            }
+            while(i < j) {
+                int val = get<1>(arr[i]);
+                if (heap.size() < (size_t)k) {
+                    heap.push(val);
+                    sum += val;
+                } else if (!heap.empty() && heap.top() < val) {
+                    sum -= heap.top();
+                    heap.pop();
+                    heap.push(val);
+                    sum += val;
+                }
+                i++;
+            }
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> queryResults(int limit, vector<vector<int>>& queries) {
+        unordered_map<int, int> ballColor;
+        unordered_map<int, int> colorCount;
+        vector<int> result;
+        for (auto& q : queries) {
+            int ball = q[0], color = q[1];
+            if (ballColor.count(ball)) {
+                int prevColor = ballColor[ball];
+                if (prevColor == color) {
+                    result.push_back(colorCount.size());
+                    continue;
+                }
+                colorCount[prevColor]--;
+                if (colorCount[prevColor] == 0)
+                    colorCount.erase(prevColor);
+            }
+            ballColor[ball] = color;
+            colorCount[color]++;
+            result.push_back(colorCount.size());
+        }
+        return result;
+    }
+};

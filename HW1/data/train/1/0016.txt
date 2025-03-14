@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int maxAbsoluteSum(vector<int>& nums) {
+        int pos=0,neg=0,m=-INT_MAX;
+        for(auto i:nums){
+            pos=max(0,pos+i);
+            neg=min(0,neg+i);
+            m=max({pos,-neg,m});
+        }
+        return m;
+    }
+};

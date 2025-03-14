@@ -1,0 +1,37 @@
+class Solution {
+public:
+    long long numberOfPairs(vector<int>& nums1, vector<int>& nums2, int diff) {
+        int n = nums1.size();
+        vector<long long> a(n);
+        for (int i = 0; i < n; i++) {
+            a[i] = (long long)nums1[i] - nums2[i];
+        }
+        vector<long long> vals;
+        for (int i = 0; i < n; i++) {
+            vals.push_back(a[i]);
+            vals.push_back(a[i] + diff);
+        }
+        sort(vals.begin(), vals.end());
+        vals.erase(unique(vals.begin(), vals.end()), vals.end());
+        int m = vals.size();
+        vector<int> fenw(m + 1, 0);
+        auto update = [&](int idx, int delta) {
+            for (++idx; idx <= m; idx += idx & -idx)
+                fenw[idx] += delta;
+        };
+        auto query = [&](int idx) {
+            int sum = 0;
+            for (++idx; idx > 0; idx -= idx & -idx)
+                sum += fenw[idx];
+            return sum;
+        };
+        long long ans = 0;
+        for (int j = 0; j < n; j++) {
+            int pos = upper_bound(vals.begin(), vals.end(), a[j] + diff) - vals.begin() - 1;
+            ans += query(pos);
+            int posUpdate = lower_bound(vals.begin(), vals.end(), a[j]) - vals.begin();
+            update(posUpdate, 1);
+        }
+        return ans;
+    }
+};

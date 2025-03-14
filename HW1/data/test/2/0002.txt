@@ -1,0 +1,32 @@
+class Solution {
+public:
+
+    void dfs(unordered_map<int,vector<int>>&adjList , int node , unordered_map<int ,int>&visited , vector<int>&ans){
+           if(visited[node]) return;
+           ans.push_back(node);
+           visited[node]=1;
+
+           for(auto i:adjList[node]){
+               dfs(adjList , i , visited ,ans);
+           }
+    }
+
+
+    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+        vector<int>ans;
+        unordered_map<int , vector<int>>adjList;
+        for(auto i:adjacentPairs){
+            adjList[i[0]].push_back(i[1]);
+            adjList[i[1]].push_back(i[0]);
+        }
+        int node = 0;
+        for(auto i:adjList){
+            if(i.second.size()==1){
+                node = i.first;
+            }
+        }
+        unordered_map<int,int>visited;
+        dfs(adjList , node , visited , ans);
+        return ans;
+    }
+};

@@ -1,0 +1,40 @@
+class Solution {
+public:
+
+    int mod = 1e9+7;
+
+    int func(string &s, int prev, int i, int score, vector<vector<vector<int>>>&dp){
+        if(i>=s.length()){
+            return score>0;
+        }
+        if(dp[1+prev][i][score+1000]!=-1) return dp[prev+1][i][score+1000];
+        int ans = 0;
+        if(prev == 0){
+            if(s[i]=='W') ans = (ans +func(s, 1, i+1, score-1, dp) + func(s, 2, i+1, score, dp))%mod;
+            if(s[i]=='E') ans = (ans +func(s, 1, i+1, score+1, dp) + func(s, 2, i+1, score-1, dp))%mod;
+            if(s[i]=='F') ans = (ans +func(s, 1, i+1, score, dp) + func(s, 2, i+1, score+1, dp))%mod;
+        }
+        else if(prev == 1){
+            if(s[i]=='W') ans = (ans + func(s, 0, i+1, score+1, dp) + func(s, 2, i+1, score, dp))%mod;
+            if(s[i]=='E') ans = (ans + func(s, 0, i+1, score, dp) + func(s, 2, i+1, score-1, dp))%mod;
+            if(s[i]=='F') ans = (ans + func(s, 0, i+1, score-1, dp) + func(s, 2, i+1, score+1, dp))%mod;
+        }
+        else if(prev == 2){
+            if(s[i]=='W') ans = (ans + func(s, 0, i+1, score+1, dp) + func(s, 1, i+1, score-1, dp))%mod;
+            if(s[i]=='E') ans = (ans + func(s, 0, i+1, score, dp) + func(s, 1, i+1, score+1, dp))%mod;
+            if(s[i]=='F') ans = (ans + func(s, 0, i+1, score-1, dp) + func(s, 1, i+1, score, dp))%mod;
+        }
+        else{
+            if(s[i]=='W') ans = ((ans + func(s, 0, i+1, score+1, dp)%mod + func(s, 1, i+1, score-1, dp)%mod)%mod + func(s, 2, i+1, score, dp)%mod)%mod;
+            if(s[i]=='E') ans = ((ans + func(s, 0, i+1, score, dp)%mod + func(s, 1, i+1, score+1, dp)%mod)%mod + func(s, 2, i+1, score-1, dp)%mod)%mod;
+            if(s[i]=='F') ans = ((ans + func(s, 0, i+1, score-1, dp)%mod + func(s, 1, i+1, score, dp)%mod)%mod + func(s, 2, i+1, score+1, dp)%mod)%mod;
+        }
+        return dp[prev+1][i][score+1000] = ans%mod;
+    }
+
+    int countWinningSequences(string s) {
+        int n = s.length();
+        vector<vector<vector<int>>>dp(5, vector<vector<int>>(n+1, vector<int>(1001+n, -1)));
+        return func(s, -1, 0, 0, dp);
+    }
+};

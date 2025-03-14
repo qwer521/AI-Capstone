@@ -1,0 +1,47 @@
+class Solution {
+public:
+     int func(int n , char c , vector<vector<int>>&dp){
+        if(n==0){
+            return 1;
+        }
+        if(dp[n][c-'a']!=-1)
+        return dp[n][c-'a'];
+        long long m = 1e9+7;
+        long long ans = 0;
+        if(c == 'a'){
+            ans =(ans + func(n-1 , 'e' , dp))%m;
+        }
+        else if(c=='e'){
+            ans =(ans + func(n-1 , 'i' , dp))%m;
+            ans =(ans+ func(n-1  ,'a' , dp))%m;
+        }
+        else if(c == 'i'){
+            ans =(ans + func(n-1 , 'a' , dp))%m;
+            ans =(ans + func(n-1 , 'e' , dp))%m;
+            ans =(ans + func(n-1 , 'o' , dp))%m;
+            ans =(ans + func(n-1 , 'u' , dp))%m;
+        
+        }
+        
+        else if(c=='o'){
+            ans =(ans + func(n-1 , 'i' , dp)+ func(n-1 , 'u' , dp))%m;
+        }
+        else if(c=='u'){
+            ans =(ans + func(n-1 , 'a' , dp))%m;
+        }
+        return dp[n][c-'a'] = ans%m;
+    }
+
+
+    int countVowelPermutation(int n) {
+        vector<vector<int>>dp(n+1 , vector<int>(26 , -1));
+        int mod = 1e9+7;
+        int ans = 0;
+        ans = (ans + func(n-1 , 'a' , dp))%mod;
+        ans = (ans + func(n-1 , 'e' , dp))%mod;
+        ans = (ans + func(n-1 , 'i' , dp))%mod;
+        ans = (ans + func(n-1 , 'o' , dp))%mod;
+        ans = (ans + func(n-1 , 'u' , dp))%mod;
+        return ans%mod;
+    }
+};

@@ -1,0 +1,26 @@
+class Solution {
+public:
+    long long maxWeight(vector<int>& vec) {
+        int n = vec.size();
+        long long ans = 0;
+        long long count = n/4;
+        long long even = count/2;
+        long long odd = count-even;
+        sort(vec.begin(), vec.end());
+        long long i = n-1;
+        int curr = 1;
+        while(curr <= odd){
+            ans += vec[i];
+            i--;
+            curr++;
+        }
+        i--;
+        curr = 1;
+        while(curr <= even){
+            ans += vec[i];
+            i -= 2;
+            curr++;
+        }
+        return ans;
+    }
+};

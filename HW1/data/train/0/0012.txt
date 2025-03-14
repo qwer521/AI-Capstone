@@ -1,0 +1,22 @@
+class Solution {
+    unordered_map<int, int> postIndex;
+    TreeNode* helper(vector<int>& pre, int preStart, int preEnd, vector<int>& post, int postStart, int postEnd) {
+        if(preStart > preEnd) return nullptr;
+        TreeNode* root = new TreeNode(pre[preStart]);
+        if(preStart == preEnd) return root;
+        int leftRoot = pre[preStart+1];
+        int index = postIndex[leftRoot];
+        int leftSize = index - postStart + 1;
+        root->left = helper(pre, preStart+1, preStart+leftSize, post, postStart, index);
+        root->right = helper(pre, preStart+leftSize+1, preEnd, post, index+1, postEnd-1);
+        return root;
+    }
+public:
+    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
+        int n = preorder.size();
+        for(int i=0;i<n;i++){
+            postIndex[postorder[i]] = i;
+        }
+        return helper(preorder, 0, n-1, postorder, 0, n-1);
+    }
+};

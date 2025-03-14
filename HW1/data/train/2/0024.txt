@@ -1,0 +1,28 @@
+class Solution {
+public:
+
+    int pivot(vector<int>&vec){
+        int n = vec.size();
+        int left = 0, right = n-1;
+
+        while(left<right){
+            int mid = left + (right - left)/2;
+            if(vec[mid]<vec[n-1]){
+                right = mid;
+            }
+            else{
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+
+    int findMin(vector<int>& vec) {
+        int n = vec.size();
+        if(vec[0]<vec[n-1]) return vec[0];
+
+        int piv = pivot(vec);
+        return vec[piv];
+    }
+};

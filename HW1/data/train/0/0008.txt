@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string res;
+    int count = 0;
+    int target;
+    int n;
+    
+    void dfs(string cur) {
+        if (cur.size() == n) {
+            count++;
+            if (count == target) {
+                res = cur;
+            }
+            return;
+        }
+        for (char c : {'a','b','c'}) {
+            if (!cur.empty() && cur.back() == c) continue;
+            if (res != "") return;
+            dfs(cur + c);
+        }
+    }
+    
+    string getHappyString(int n, int k) {
+        this->n = n;
+        target = k;
+        dfs("");
+        return res;
+    }
+};

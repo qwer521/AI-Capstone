@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int countHomogenous(string s) {
+        int n = s.length();
+        int ans = 0;
+        int mod = 1e9+7;
+        vector<int>vec(26);
+
+        int i=0;
+        while(i<n){
+            char ch = s[i];
+            string t = "";
+            int k=1;
+            while(s[i]==ch){
+                t+=ch;
+                if(vec[ch-'a']<t.length()){
+                    vec[ch-'a'] = k;
+                    ans = (ans + k)%mod;
+                    k++;
+                    i++;
+                }
+                
+            }
+        }
+        return ans;
+
+    }
+};

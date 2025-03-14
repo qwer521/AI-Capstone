@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int func(int index , int steps , int arrLen , vector<vector<int>>&dp){
+         int N = 1e9+7;
+         if(steps==0) return index==0;
+         if(dp[index][steps]!=-1) return dp[index][steps];
+         
+         int ans = 0;
+         if(index > 0)
+         ans = (ans+func(index-1 , steps-1 , arrLen , dp))%N;
+         ans = (ans+func(index , steps-1 , arrLen , dp))%N;
+         if(index < arrLen-1)
+         ans = (ans+func(index+1 , steps-1 , arrLen , dp))%N;
+         return dp[index][steps] = ans%N;
+    }
+
+    int numWays(int steps, int arrLen) {
+        vector<vector<int>>dp(steps+1 , vector<int>(steps+1 , -1));
+        return func(0 , steps , arrLen , dp);
+    }
+};

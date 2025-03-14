@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int minimumPushes(string wor) {
+        int n = wor.length();
+        int ans = 0;
+        vector<int>vec(26);
+        for(int i=0;i<n;i++){
+            vec[wor[i]-'a']++;
+        }
+        sort(vec.begin(), vec.end());
+        reverse(vec.begin(), vec.end());
+        int k=0;
+        for(int i=0;i<26;i++){
+            k++;
+            if(vec[i]>0)
+            ans+=vec[i]*ceil(k/8.0);
+        }
+        return ans;
+    }
+};

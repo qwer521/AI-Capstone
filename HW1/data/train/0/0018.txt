@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int countArrays(vector<int>& original, vector<vector<int>>& bounds) {
+        int n = original.size();
+        long long L = bounds[0][0], R = bounds[0][1];
+        for (int i = 0; i < n; i++) {
+            long long d = (long long)original[i] - original[0];
+            long long l = bounds[i][0] - d;
+            long long r = bounds[i][1] - d;
+            L = max(L, l);
+            R = min(R, r);
+        }
+        return L > R ? 0 : (int)(R - L + 1);
+    }
+};
